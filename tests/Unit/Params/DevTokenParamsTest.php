@@ -17,7 +17,7 @@ class DevTokenParamsTest extends AbstractTestCase
      */
     public function testRequiredProperties(): void
     {
-        $params = new DevTokenParams($username = $this->faker->word, $password = $this->faker->word);
+        $params = new DevTokenParams($username = 'username', $password = 'pa$$vvord');
 
         $this->assertSame($username, $params->getUsername());
         $this->assertSame($password, $params->getPassword());
@@ -28,11 +28,11 @@ class DevTokenParamsTest extends AbstractTestCase
      */
     public function testSettedOptionalProperties(): void
     {
-        $params = new DevTokenParams($this->faker->word, $this->faker->word);
+        $params = new DevTokenParams('username', 'pa$$vvord');
         $params
-            ->setPasswordHashed($is_password_hashed = $this->faker->boolean)
+            ->setPasswordHashed($is_password_hashed = (bool)\random_int(0,1))
             ->setDateFrom($date = new \DateTime)
-            ->setTokenLifetime($token_lifetime = $this->faker->randomDigitNotNull);
+            ->setTokenLifetime($token_lifetime = \random_int(1, PHP_INT_MAX));
 
         $this->assertSame($is_password_hashed, $params->isPasswordHashed());
         $this->assertSame($date, $params->getDateFrom());
@@ -44,7 +44,7 @@ class DevTokenParamsTest extends AbstractTestCase
      */
     public function testNotSettedOptionalProperties(): void
     {
-        $params = new DevTokenParams($this->faker->word, $this->faker->word);
+        $params = new DevTokenParams('username', 'pa$$vvord');
 
         $this->assertNull($params->isPasswordHashed());
         $this->assertNull($params->getDateFrom());

@@ -18,7 +18,7 @@ class UserBalanceParamsTest extends AbstractTestCase
     public function testRequiredProperties(): void
     {
         $params = new UserBalanceParams(
-            $report_type_uid = $this->faker->word
+            $report_type_uid = 'some-uid'
         );
 
         $this->assertSame($report_type_uid, $params->getReportTypeUid());
@@ -29,8 +29,8 @@ class UserBalanceParamsTest extends AbstractTestCase
      */
     public function testSettedOptionalProperties(): void
     {
-        $params = new UserBalanceParams($this->faker->word);
-        $params->setDetailed($is_detailed = $this->faker->boolean);
+        $params = new UserBalanceParams('some-uid');
+        $params->setDetailed($is_detailed = (bool)\random_int(0,1));
 
         $this->assertSame($is_detailed, $params->isDetailed());
     }
@@ -40,7 +40,7 @@ class UserBalanceParamsTest extends AbstractTestCase
      */
     public function testNotSettedOptionalProperties(): void
     {
-        $params = new UserBalanceParams($this->faker->word);
+        $params = new UserBalanceParams('some-uid');
 
         $this->assertNull($params->isDetailed());
     }

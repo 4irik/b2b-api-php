@@ -18,7 +18,7 @@ class UserParamsTest extends AbstractTestCase
     public function testSettedOptionalProperties(): void
     {
         $params = new UserParams;
-        $params->setDetailed($is_detailed = $this->faker->boolean);
+        $params->setDetailed($is_detailed = (bool)\random_int(0,1));
 
         $this->assertSame($is_detailed, $params->isDetailed());
     }

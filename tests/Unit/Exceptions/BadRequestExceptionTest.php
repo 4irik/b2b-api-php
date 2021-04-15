@@ -23,9 +23,9 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testInstanceAndGetters(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.get-url.biz/bad-request.html'),
             $response = new Response,
-            $message = $this->faker->word,
+            $message = 'message',
             $code = \random_int(1, 100),
             $prev = new Exception
         );
@@ -46,7 +46,7 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testErrorMessageExtractingUsingB2BApiGenericSystemError(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.url.biz/bad-request.html'),
             $response =
                 new Response(500, [], \file_get_contents(__DIR__ . '/../../stubs/generic_system_error_500.json'))
         );
@@ -63,7 +63,7 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testErrorMessageExtractingUsingB2BApiMissingReportTypeError(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.url.biz/bad-request.html'),
             $response =
                 new Response(500, [], \file_get_contents(__DIR__ . '/../../stubs/report_type_not_found_500.json'))
         );
@@ -80,7 +80,7 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testErrorMessageExtractingUsingB2BApiWrongJsonError(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.url.biz/bad-request.html'),
             $response = new Response(500, [], \file_get_contents(__DIR__ . '/../../stubs/wrong_json_passed_400.json'))
         );
 
@@ -96,7 +96,7 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testErrorMessageExtractingUsingB2BApiWrongAuthTokenError(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.url.biz/bad-request.html'),
             $response = new Response(500, [], \file_get_contents(__DIR__ . '/../../stubs/wrong_token_error_400.json'))
         );
 
@@ -112,7 +112,7 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testPrevExceptionMessageGetting(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.url.biz/bad-request.html'),
             $response = new Response(500),
             $message = null,
             $code = null,
@@ -128,7 +128,7 @@ class BadRequestExceptionTest extends AbstractTestCase
     public function testMessagePassing(): void
     {
         $exception = new BadRequestException(
-            $request = new Request('get', $this->faker->url),
+            $request = new Request('get', 'http://www.url.biz/bad-request.html'),
             $response = new Response(500),
             $message = 'foo bar',
             $code = null,

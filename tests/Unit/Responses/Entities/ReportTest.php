@@ -31,7 +31,7 @@ class ReportTest extends AbstractTestCase
             $uid = $attributes['uid'],
             $comment = $attributes['comment'],
             $name = $attributes['name'],
-            $content = $this->faker->randomElement([null, EntitiesFactory::make(ReportContent::class)]),
+            $content = EntitiesFactory::make(ReportContent::class),
             $query = EntitiesFactory::make(ReportQuery::class),
             $vehicle_id = $attributes['vehicle_id'],
             $report_type_uid = $attributes['report_type_uid'],

@@ -31,7 +31,7 @@ class SettingsTest extends AbstractTestCase
         parent::setUp();
 
         $this->settings = new Settings(
-            $this->auth_token = $this->faker->word
+            $this->auth_token = 'auth-token'
         );
     }
 
@@ -53,7 +53,7 @@ class SettingsTest extends AbstractTestCase
     {
         $this->assertSame($this->auth_token, $this->settings->getAuthToken());
 
-        $this->settings->setAuthToken($new_token = $this->faker->word);
+        $this->settings->setAuthToken($new_token = 'new-token');
 
         $this->assertSame($new_token, $this->settings->getAuthToken());
     }

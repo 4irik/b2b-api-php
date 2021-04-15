@@ -18,9 +18,9 @@ class UserReportMakeParamsTest extends AbstractTestCase
     public function testRequiredProperties(): void
     {
         $params = new UserReportMakeParams(
-            $report_type_uid = $this->faker->word,
-            $type = $this->faker->word,
-            $value = $this->faker->word
+            $report_type_uid = 'some-uid',
+            $type = 'VIN',
+            $value = 'Z94CB41AAGR323020'
         );
 
         $this->assertSame($report_type_uid, $params->getReportTypeUid());
@@ -33,17 +33,21 @@ class UserReportMakeParamsTest extends AbstractTestCase
      */
     public function testSettedOptionalProperties(): void
     {
-        $params = new UserReportMakeParams($this->faker->word, $this->faker->word, $this->faker->word);
+        $params = new UserReportMakeParams('some-uid', 'VIN', 'Z94CB41AAGR323020');
         $params
             ->setOptions([
-                ($key_one = $this->faker->word) => $this->faker->randomDigitNotNull,
-                ($key_two = $this->faker->word) => $this->faker->word,
+                ($key_one = 'key_one') => \random_int(1, PHP_INT_MAX),
+                ($key_two = 'key_two') => 'some-word',
             ])
-            ->setForce($is_force = $this->faker->boolean)
-            ->setOnUpdateUrl($on_update = $this->faker->url)
-            ->setOnCompleteUrl($on_complete = $this->faker->url)
-            ->setData($data = $this->faker->words(3))
-            ->setIdempotenceKey($idempotence_key = $this->faker->word);
+            ->setForce($is_force = (bool)\random_int(0,1))
+            ->setOnUpdateUrl($on_update = 'http://some-url.qq/on-update.html')
+            ->setOnCompleteUrl($on_complete = 'http://some-url.qq/on-complete.html')
+            ->setData($data = [
+                'one',
+                'two',
+                'three'
+            ])
+            ->setIdempotenceKey($idempotence_key = uniqid());
 
         $this->assertSame($is_force, $params->isForce());
         $this->assertSame($idempotence_key, $params->getIdempotenceKey());
@@ -60,7 +64,7 @@ class UserReportMakeParamsTest extends AbstractTestCase
      */
     public function testNotSettedOptionalProperties(): void
     {
-        $params = new UserReportMakeParams($this->faker->word, $this->faker->word, $this->faker->word);
+        $params = new UserReportMakeParams('some-uid', 'VIN', 'Z94CB41AAGR323020');
 
         $this->assertNull($params->isForce());
         $this->assertNull($params->getIdempotenceKey());

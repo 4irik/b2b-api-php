@@ -18,7 +18,7 @@ class DevPingParamsTest extends AbstractTestCase
     public function testSettedOptionalProperties(): void
     {
         $params = new DevPingParams;
-        $params->setValue($ivalue = $this->faker->word);
+        $params->setValue($ivalue = 'some_word');
 
         $this->assertSame($ivalue, $params->getValue());
     }

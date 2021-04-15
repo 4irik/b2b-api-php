@@ -4,18 +4,12 @@ declare(strict_types = 1);
 
 namespace Avtocod\B2BApi\Tests;
 
-use Faker\Generator as Faker;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use AvtoDev\GuzzleUrlMock\UrlsMockHandler;
 
 abstract class AbstractTestCase extends TestCase
 {
-    /**
-     * @var Faker
-     */
-    protected $faker;
-
     /**
      * @var UrlsMockHandler
      */
@@ -27,8 +21,6 @@ abstract class AbstractTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->faker = \Faker\Factory::create();
 
         $this->guzzle_handler = new UrlsMockHandler;
 

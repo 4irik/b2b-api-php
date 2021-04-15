@@ -18,10 +18,10 @@ class TokenInfoTest extends AbstractTestCase
     public function testBasicGetters(): void
     {
         $token_info = new TokenInfo(
-            $user = "{$this->faker->userName}@{$this->faker->company}",
-            $timestamp = $this->faker->randomNumber(),
-            $age = $this->faker->randomNumber(),
-            $salted_hash = $this->faker->sha1
+            $user = "user123@bogan",
+            $timestamp = \random_int(0, PHP_INT_MAX),
+            $age = \random_int(0, PHP_INT_MAX),
+            $salted_hash = 'f08e7f04ca1a413807ebc47551a40a20a0b4de5c'
         );
 
         $this->assertSame($user, $token_info->getUser());
@@ -36,23 +36,15 @@ class TokenInfoTest extends AbstractTestCase
     public function testDomainAndUsernameGetters(): void
     {
         foreach (\range(1, 50) as $i) {
-            $username = $this->faker->randomElement([
-                $this->faker->userName,
-                $this->faker->domainName,
-                $this->faker->firstName,
-            ]);
+            $username = 'username';
 
-            $domain = $this->faker->randomElement([
-                $this->faker->company,
-                $this->faker->domainName,
-                $this->faker->lastName,
-            ]);
+            $domain = 'domain';
 
             $token_info = new TokenInfo(
                 "{$username}@{$domain}",
-                $this->faker->randomNumber(),
-                $this->faker->randomNumber(),
-                $this->faker->sha1
+                \random_int(0, PHP_INT_MAX),
+                \random_int(0, PHP_INT_MAX),
+                'f08e7f04ca1a413807ebc47551a40a20a0b4de5c'
             );
 
             $this->assertSame($username, $token_info->getUsername());
@@ -60,10 +52,10 @@ class TokenInfoTest extends AbstractTestCase
         }
 
         $token_info = new TokenInfo(
-            $this->faker->userName,
-            $this->faker->randomNumber(),
-            $this->faker->randomNumber(),
-            $this->faker->sha1
+            'username',
+            \random_int(0, PHP_INT_MAX),
+            \random_int(0, PHP_INT_MAX),
+            'f08e7f04ca1a413807ebc47551a40a20a0b4de5c'
         );
 
         $this->assertNull($token_info->getUsername());

@@ -44,7 +44,7 @@ class UserTest extends AbstractTestCase
             $name = $attributes['name'],
             $state = $attributes['state'],
             $domain_uid = $attributes['domain_uid'],
-            $domain = $this->faker->randomElement([null, EntitiesFactory::make(Domain::class)]),
+            $domain = EntitiesFactory::make(Domain::class),
             $roles = \explode(',', $attributes['roles']),
             $tags = \explode(',', $attributes['tags']),
             $created_at = DateTimeImmutable::createFromMutable(DateTimeFactory::createFromIso8601Zulu($attributes['created_at'])),

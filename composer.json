@@ -23,7 +23,6 @@
         "ocramius/package-versions": "^1.2"
     },
     "require-dev": {
-        "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.3",
         "phpstan/phpstan": "~0.12",
         "phpunit/phpunit": "^8.5.4",

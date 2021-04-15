@@ -32,7 +32,7 @@ class ReportStateTest extends AbstractTestCase
         $instance = new ReportState([$report_source_state = EntitiesFactory::make(ReportSourceState::class)]);
 
         $this->assertSame($report_source_state, $instance->getSourceStateByName($report_source_state->getName()));
-        $this->assertNull($instance->getSourceStateByName($this->faker->word));
+        $this->assertNull($instance->getSourceStateByName('slovo'));
     }
 
     /**

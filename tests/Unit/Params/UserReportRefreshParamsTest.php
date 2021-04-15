@@ -18,7 +18,7 @@ class UserReportRefreshParamsTest extends AbstractTestCase
     public function testRequiredProperties(): void
     {
         $params = new UserReportRefreshParams(
-            $report_uid = $this->faker->word
+            $report_uid = 'report_uid'
         );
 
         $this->assertSame($report_uid, $params->getReportUid());
@@ -29,11 +29,11 @@ class UserReportRefreshParamsTest extends AbstractTestCase
      */
     public function testSettedOptionalProperties(): void
     {
-        $params = new UserReportRefreshParams($this->faker->word);
+        $params = new UserReportRefreshParams('report_uid');
         $params
             ->setOptions([
-                ($key_one = $this->faker->word) => $this->faker->randomDigitNotNull,
-                ($key_two = $this->faker->word) => $this->faker->word,
+                ($key_one = 'key_one') => \random_int(1, PHP_INT_MAX),
+                ($key_two = 'key_two') => 'some-value',
             ]);
 
         $this->assertArrayHasKey($key_one, $params->getOptions());
@@ -45,7 +45,7 @@ class UserReportRefreshParamsTest extends AbstractTestCase
      */
     public function testNotSettedOptionalProperties(): void
     {
-        $params = new UserReportRefreshParams($this->faker->word);
+        $params = new UserReportRefreshParams('report_uid');
 
         $this->assertNull($params->getOptions());
     }

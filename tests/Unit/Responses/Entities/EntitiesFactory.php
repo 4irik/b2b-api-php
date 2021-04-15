@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Avtocod\B2BApi\Tests\Unit\Responses\Entities;
 
 use DateTimeImmutable;
-use Faker\Generator as Faker;
 use InvalidArgumentException;
 use Avtocod\B2BApi\DateTimeFactory;
 use Avtocod\B2BApi\Responses\Entities\User;
@@ -51,7 +50,7 @@ class EntitiesFactory
         /** @var callable $factory */
         $factory = static::$factories[$entity_class];
 
-        return $factory(static::getFaker(), $attributes, $as_array);
+        return $factory($attributes, $as_array);
     }
 
     /**
@@ -60,44 +59,42 @@ class EntitiesFactory
     protected static function bootUpFactories(): void
     {
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|Domain
          */
         static::$factories[Domain::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'uid'         => $faker->userName,
-                'comment'     => $faker->sentence,
-                'name'        => $faker->sentence,
-                'state'       => $faker->randomElement(['DRAFT', 'ACTIVE', 'BANNED']),
+                'uid'         => 'wade55',
+                'comment'     => 'Expedita at beatae voluptatibus nulla omnis.',
+                'name'        => 'Sit vitae voluptas sint non voluptates.',
+                'state'       => 'DRAFT',
                 'roles'       => $as_array
-                    ? \implode(',', $faker->randomElement([[], ['CLIENT', 'USER']]))
-                    : $faker->randomElement([null, ['CLIENT', 'USER']]),
+                    ? 'CLIENT,USER'
+                    : ['CLIENT', 'USER'],
                 'tags'        => $as_array
-                    ? \implode(',', $faker->randomElement([[], ['site', 'robot']]))
-                    : $faker->randomElement([[], ['site', 'robot']]),
+                    ? 'site,robot'
+                    : ['site', 'robot'],
                 'created_at'  => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisYear)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisYear),
-                'created_by'  => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
+                'created_by'  => 'iddqd',
                 'updated_at'  => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth),
-                'updated_by'  => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
+                'updated_by'  => 'iuser',
                 'active_from' => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
                 'active_to'   => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth),
-                'id'          => $faker->randomElement([null, $faker->randomNumber()]),
-                'deleted'     => $faker->randomElement([null, $faker->boolean]),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
+                'id'          => null,
+                'deleted'     => null,
             ], $attributes);
 
             return $as_array === true
@@ -121,58 +118,50 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|User
          */
         static::$factories[User::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'uid'         => $uid = ($user_in_domain_name = $faker->userName)
+                'uid'         => $uid = ($user_in_domain_name = 'user123')
                                         . '@'
-                                        . ($domain_uid = $faker->domainWord),
-                'comment'     => $faker->sentence,
-                'contacts'    => $faker->randomElement(['------', '', $faker->streetAddress]),
-                'email'       => $faker->randomElement(['------', '', $faker->email]),
+                                        . ($domain_uid = 'feeney'),
+                'comment'     => 'Optio quos qui illo error.',
+                'contacts'    => '439 Karley Loaf Suite 897',
+                'email'       => 'tkshlerin@collins.com',
                 'login'       => $uid,
-                'name'        => $faker->randomElement([$user_in_domain_name, $faker->sentence]),
-                'state'       => $faker->randomElement(['ACTIVATION_REQUIRED', 'ACTIVE', 'BANNED']),
+                'name'        => $user_in_domain_name,
+                'state'       => 'ACTIVATION_REQUIRED',
                 'domain_uid'  => $domain_uid,
-                'domain'      => $faker->randomElement([null, static::make(Domain::class, [], $as_array)]),
+                'domain'      => static::make(Domain::class, [], $as_array),
                 'roles'       => $as_array
-                    ? \implode(',', $faker->randomElements(
-                        ['ADMIN', 'DOMAIN', 'DOMAIN_ADMIN', 'ALL_REPORTS_READ', 'ALL_REPORTS_WRITE'],
-                        $faker->numberBetween(0, 5)
-                    ))
-                    : $faker->randomElements(
-                        ['ADMIN', 'DOMAIN', 'DOMAIN_ADMIN', 'ALL_REPORTS_READ', 'ALL_REPORTS_WRITE'],
-                        $faker->numberBetween(0, 5)
-                    ),
+                    ? 'ADMIN,DOMAIN,DOMAIN_ADMIN'
+                    : ['ADMIN', 'DOMAIN', 'DOMAIN_ADMIN'],
                 'tags'        => $as_array
-                    ? \implode(',', $faker->randomElement([[], [$faker->word, $faker->word]]))
-                    : $faker->randomElement([[], [$faker->word, $faker->word]]),
+                    ? ''
+                    : [],
                 'created_at'  => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisYear)
-                    : $faker->dateTimeThisYear,
-                'created_by'  => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'created_by'  => 'user234',
                 'updated_at'  => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
-                'updated_by'  => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'updated_by'  => 'user345',
                 'active_from' => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
                 'active_to'   => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
-                'id'          => $faker->randomElement([null, $faker->randomNumber()]),
-                'deleted'     => $faker->randomElement([null, $faker->boolean]),
-                'pass_hash'   => $faker->randomElement([null, $faker->md5]),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'id'          => \random_int(1, PHP_INT_MAX),
+                'deleted'     => (bool)\random_int(0,1),
+                'pass_hash'   => 'de99a620c50f2990e87144735cd357e7',
             ], $attributes);
 
             return $as_array === true
@@ -202,51 +191,42 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|Group
          */
         static::$factories[Group::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'uid'         => ($group_name = $faker->userName) . '@' . $faker->domainWord,
-                'comment'     => $faker->randomElement(['', '------', $group_name, $faker->sentence]),
-                'name'        => $faker->randomElement(['', $faker->sentence]),
-                'users'       => $faker->randomElement([$faker->randomElements(
-                    [
-                        static::make(User::class, [], $as_array),
-                        static::make(User::class, [], $as_array),
-                        static::make(User::class, [], $as_array),
-                    ],
-                    $faker->numberBetween(0, 3)
-                ), null]),
+                'uid'         => ($group_name = 'user123') . '@' . 'domain',
+                'comment'     => '',
+                'name'        => '',
+                'users'       => [static::make(User::class, [], $as_array), static::make(User::class, [], $as_array)],
                 'roles'       => $as_array
-                    ? \implode(',', $faker->randomElements(['ADMIN', 'USER'], $faker->numberBetween(0, 2)))
-                    : $faker->randomElements(['ADMIN', 'USER'], $faker->numberBetween(0, 2)),
+                    ? 'ADMIN,USER'
+                    : ['ADMIN', 'USER'],
                 'tags'        => $as_array
-                    ? \implode(',', $faker->randomElement([[], [$faker->word, $faker->word]]))
-                    : $faker->randomElement([[], [$faker->word, $faker->word]]),
+                    ? ''
+                    : [],
                 'created_at'  => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisYear)
-                    : $faker->dateTimeThisYear,
-                'created_by'  => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'created_by'  => 'user123',
                 'updated_at'  => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
-                'updated_by'  => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'updated_by'  => 'user234',
                 'active_from' => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
                 'active_to'   => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
-                'id'          => $faker->randomElement([null, $faker->randomNumber()]),
-                'deleted'     => $faker->randomElement([null, $faker->boolean]),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'id'          => null,
+                'deleted'     => null,
             ], $attributes);
 
             return $as_array === true
@@ -270,53 +250,47 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|Report
          */
         static::$factories[Report::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'uid'             => ($group_name = $faker->userName) . '@' . ($domain = $faker->domainWord),
-                'comment'         => $faker->randomElement(['', '------', $group_name, $faker->sentence]),
-                'name'            => $faker->randomElement(['', $faker->sentence]),
-                'content'         => $faker->randomElement([null, static::make(ReportContent::class, [], $as_array)]),
+                'uid'             => ($group_name = 'user123') . '@' . ($domain = 'domain'),
+                'comment'         => '',
+                'name'            => '',
+                'content'         => static::make(ReportContent::class, [], $as_array),
                 'query'           => static::make(ReportQuery::class, [], $as_array),
-                'vehicle_id'      => $vehicle_id = $faker->randomElement([
-                    null,
-                    '5TDDKRFH80S073711',
-                    'Z94C241BAKR127472',
-                ]),
-                'report_type_uid' => $faker->word . '@' . $domain,
+                'vehicle_id'      => $vehicle_id = '5TDDKRFH80S073711',
+                'report_type_uid' => 'word' . '@' . $domain,
                 'domain_uid'      => $domain,
                 'tags'            => $as_array
-                    ? \implode(',', $faker->randomElement([[], [$faker->word, $faker->word]]))
-                    : $faker->randomElement([[], [$faker->word, $faker->word]]),
+                    ? ''
+                    : [],
                 'created_at'      => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisYear)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisYear),
-                'created_by'      => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
+                'created_by'      => 'user234',
                 'updated_at'      => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth),
-                'updated_by'      => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
+                'updated_by'      => 'user345',
                 'active_from'     => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
                 'active_to'       => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth),
-                'progress_ok'     => $faker->numberBetween(0, 15),
-                'progress_wait'   => $faker->numberBetween(0, 15),
-                'progress_error'  => $faker->numberBetween(0, 15),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : DateTimeImmutable::createFromMutable(new \DateTime()),
+                'progress_ok'     => \random_int(0, 15),
+                'progress_wait'   => \random_int(0, 15),
+                'progress_error'  => \random_int(0, 15),
                 'state'           => static::make(ReportState::class, [], $as_array),
-                'id'              => $faker->randomElement([null, $faker->randomNumber()]),
-                'deleted'         => $faker->randomElement([null, $faker->boolean]),
+                'id'              => null,
+                'deleted'         => null,
             ], $attributes);
 
             return $as_array === true
@@ -347,29 +321,27 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|Balance
          */
         static::$factories[Balance::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'report_type_uid' => $faker->userName . '@' . $faker->domainWord,
-                'balance_type'    => $faker->randomElement(['DAY', 'MONTH', 'TOTAL']),
-                'quote_init'      => $faker->randomNumber(),
-                'quote_up'        => $faker->randomNumber(),
-                'quote_use'       => $faker->randomNumber(),
+                'report_type_uid' => 'user123@domain',
+                'balance_type'    => 'DAY',
+                'quote_init'      => \random_int(0, PHP_INT_MAX),
+                'quote_up'        => \random_int(0, PHP_INT_MAX),
+                'quote_use'       => \random_int(0, PHP_INT_MAX),
                 'created_at'      => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisYear)
-                    : $faker->dateTimeThisYear,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
                 'updated_at'      => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
             ], $attributes);
 
             return $as_array === true
@@ -386,25 +358,23 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|ReportContent
          */
         static::$factories[ReportContent::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $data = [
-                'string' => $faker->word,
-                'number' => $faker->randomNumber(),
-                'bool'   => $faker->boolean,
+                'string' => 'fasdfa',
+                'number' => \random_int(0, PHP_INT_MAX),
+                'bool'   => (bool)\random_int(0,1),
                 'array'  => [
-                    'string' => $faker->word,
-                    'number' => $faker->randomNumber(),
-                    'bool'   => $faker->boolean,
+                    'string' => 'word',
+                    'number' => \random_int(0, PHP_INT_MAX),
+                    'bool'   => (bool)\random_int(0,1),
                 ],
             ];
 
@@ -414,21 +384,19 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|ReportQuery
          */
         static::$factories[ReportQuery::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'type' => $faker->randomElement([null, 'GRZ', 'VIN', 'BODY']),
-                'body' => $faker->randomElement([null, '5TDDKRFH80S073711', 'Z94C241BAKR127472']),
-                'data' => $faker->randomElement([null, ['foo' => 'bar']]),
+                'type' => 'BODY',
+                'body' => 'Z94C241BAKR127472',
+                'data' => ['foo' => 'bar'],
             ], $attributes);
 
             return $as_array === true
@@ -441,18 +409,16 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return ReportState|mixed
          */
         static::$factories[ReportState::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
-            $data = $faker->randomElement([[], [static::make(ReportSourceState::class, [], $as_array)]]);
+            $data = [static::make(ReportSourceState::class, [], $as_array)];
 
             return $as_array === true
                 ? $data
@@ -460,21 +426,19 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|CleanOptions
          */
         static::$factories[CleanOptions::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'process_response' => $faker->randomNumber(),
-                'process_request'  => $faker->randomNumber(),
-                'report_log'       => $faker->randomNumber(),
+                'process_response' => \random_int(0, PHP_INT_MAX),
+                'process_request'  => \random_int(0, PHP_INT_MAX),
+                'report_log'       => \random_int(0, PHP_INT_MAX),
             ], $attributes);
 
             return $as_array === true
@@ -487,21 +451,19 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|ReportSourceState
          */
         static::$factories[ReportSourceState::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                '_id'   => $faker->randomElement(['base', 'base.ext', 'references.base', 'images.avtonomer']),
-                'state' => $faker->randomElement(['ERROR', 'OK', 'PROGRESS']),
-                'data'  => $faker->randomElement([null, ['foo' => 'bar']]),
+                '_id'   => 'base',
+                'state' => 'ERROR',
+                'data'  => ['foo' => 'bar'],
             ], $attributes);
 
             return $as_array === true
@@ -514,24 +476,22 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|ReportMade
          */
         static::$factories[ReportMade::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'report_uid'          => ($user = $faker->userName) . '@' . ($domain = $faker->domainWord),
-                'is_new'              => $faker->boolean,
-                'process_request_uid' => $faker->randomElement([null, $user . '_' . $faker->sha256 . '@' . $domain]),
+                'report_uid'          => ($user = 'user123') . '@' . ($domain = 'domain'),
+                'is_new'              => (bool)\random_int(0, 1),
+                'process_request_uid' => null,
                 'suggest_get'         => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
             ], $attributes);
 
             return $as_array === true
@@ -545,20 +505,18 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|ReportTypeContent
          */
         static::$factories[ReportTypeContent::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'sources' => $faker->words($faker->numberBetween(3, 15)),
-                'fields'  => $faker->words($faker->numberBetween(3, 15)),
+                'sources' => ['porro', 'sed', 'magni'],
+                'fields'  => ['field_1', 'field_2', 'field_3'],
             ], $attributes);
 
             return $as_array === true
@@ -570,64 +528,51 @@ class EntitiesFactory
         };
 
         /**
-         * @param Faker $faker
          * @param array $attributes
          * @param bool  $as_array
          *
          * @return array|ReportType
          */
         static::$factories[ReportType::class] = function (
-            Faker $faker,
             array $attributes = [],
             bool $as_array = false
         ) {
             $attributes = \array_replace([
-                'uid'              => $faker->word . '@' . $faker->domainWord,
-                'comment'          => $faker->randomElement(['', '------', $faker->domainWord, $faker->sentence]),
-                'name'             => $faker->randomElement(['', $faker->sentence]),
-                'state'            => $faker->randomElement(['DRAFT', 'PUBLISHED', 'OBSOLETE']),
+                'uid'              => 'word@domain',
+                'comment'          => '------',
+                'name'             => 'Sit vitae voluptas sint non voluptates.',
+                'state'            => 'DRAFT',
                 'tags'             => $as_array
-                    ? \implode(',', $faker->randomElement([[], [$faker->word, $faker->word]]))
-                    : $faker->randomElement([[], [$faker->word, $faker->word]]),
-                'max_age'          => $faker->numberBetween(),
-                'domain_uid'       => $faker->domainWord,
-                'content'          => $faker->randomElement([
-                    static::make(ReportTypeContent::class, [], $as_array),
-                    null,
-                ]),
-                'day_quote'        => $faker->numberBetween(),
-                'month_quote'      => $faker->numberBetween(),
-                'total_quote'      => $faker->numberBetween(),
-                'min_priority'     => $faker->numberBetween(),
-                'max_priority'     => $faker->numberBetween(),
-                'period_priority'  => $faker->numberBetween(),
-                'max_request'      => $faker->numberBetween(),
+                    ? ''
+                    : [],
+                'max_age'          => \random_int(0, PHP_INT_MAX),
+                'domain_uid'       => 'domain',
+                'content'          => static::make(ReportTypeContent::class, [], $as_array),
+                'day_quote'        => \random_int(0, PHP_INT_MAX),
+                'month_quote'      => \random_int(0, PHP_INT_MAX),
+                'total_quote'      => \random_int(0, PHP_INT_MAX),
+                'min_priority'     => \random_int(0, PHP_INT_MAX),
+                'max_priority'     => \random_int(0, PHP_INT_MAX),
+                'period_priority'  => \random_int(0, PHP_INT_MAX),
+                'max_request'      => \random_int(0, PHP_INT_MAX),
                 'created_at'       => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisYear)
-                    : $faker->dateTimeThisYear,
-                'created_by'       => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'created_by'       => 'user123',
                 'updated_at'       => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
-                'updated_by'       => $faker->userName,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'updated_by'       => 'user234',
                 'active_from'      => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
                 'active_to'        => $as_array
-                    ? DateTimeFactory::toIso8601Zulu($faker->dateTimeThisMonth)
-                    : $faker->dateTimeThisMonth,
-                'clean_options'    => $faker->randomElement([
-                    static::make(CleanOptions::class, [], $as_array),
-                    null,
-                ]),
-                'report_make_mode' => $faker->randomElement([
-                    'TRANSACTIONAL',
-                    'FAST_NON_TRANSACTIONAL',
-                    'FAST_NON_BALANCE',
-                    null,
-                ]),
-                'id'               => $faker->randomElement([null, $faker->randomNumber()]),
-                'deleted'          => $faker->randomElement([null, $faker->boolean]),
+                    ? DateTimeFactory::toIso8601Zulu(new \DateTime())
+                    : new \DateTime(),
+                'clean_options'    => static::make(CleanOptions::class, [], $as_array),
+                'report_make_mode' => 'TRANSACTIONAL',
+                'id'               => null,
+                'deleted'          => null,
             ], $attributes);
 
             return $as_array === true
@@ -660,17 +605,5 @@ class EntitiesFactory
                     $attributes['deleted']
                 );
         };
-    }
-
-    /**
-     * @return Faker
-     */
-    protected static function getFaker(): Faker
-    {
-        static $faker;
-
-        return $faker instanceof Faker
-            ? $faker
-            : $faker = \Faker\Factory::create();
     }
 }

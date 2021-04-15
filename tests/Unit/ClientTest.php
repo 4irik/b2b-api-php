@@ -237,7 +237,7 @@ class ClientTest extends AbstractTestCase
             $response = new Response(
                 200, ['content-type' => 'application/json;charset=utf-8'], \json_encode((object) [
                     'value' => (string) \time(),
-                    'in'    => $this->faker->numberBetween(0, 100),
+                    'in'    => \random_int(0, 100),
                     'out'   => $out = (\time() * 1000),
                     'delay' => $out + 1,
                 ])
@@ -309,7 +309,7 @@ class ClientTest extends AbstractTestCase
             $response = new Response(
                 200, ['content-type' => 'application/json;charset=utf-8'], \json_encode((object) [
                     'value' => (string) \time(),
-                    'in'    => $this->faker->numberBetween(0, 100),
+                    'in'    => \random_int(0, 100),
                     'out'   => $out = (\time() * 1000),
                     'delay' => $out + 1,
                 ])
@@ -362,7 +362,7 @@ class ClientTest extends AbstractTestCase
             new Response(
                 200, ['content-type' => 'application/json;charset=utf-8'], $raw = \json_encode((object) [
                     'value' => $value = (string) $time,
-                    'in'    => $in = $this->faker->numberBetween(0, 100),
+                    'in'    => $in = random_int(0, 100),
                     'out'   => $out = ($time * 1000),
                     'delay' => $delay = ($out + 1),
                 ])
@@ -408,7 +408,7 @@ class ClientTest extends AbstractTestCase
             $this->settings->getBaseUri() . 'dev/token?' . \http_build_query([
                 'user'    => $user = 'test@test',
                 'pass'    => $pass = 'test',
-                'is_hash' => ($is_hash = $this->faker->boolean)
+                'is_hash' => ($is_hash = (bool)\random_int(0, 1))
                     ? 'true'
                     : 'false',
                 'date'    => DateTimeFactory::toIso8601ZuluWithoutMs($date = new DateTime),
@@ -1401,8 +1401,8 @@ class ClientTest extends AbstractTestCase
         $params = new UserReportMakeParams($report_type_uid, $type = 'VIN', $body = 'Z94CB41AAGR323020');
         $params
             ->setForce(true)
-            ->setOnUpdateUrl($on_update = $this->faker->url)
-            ->setOnCompleteUrl($on_complete = $this->faker->url)
+            ->setOnUpdateUrl($on_update = 'http://www.url.biz/on-update.html')
+            ->setOnCompleteUrl($on_complete = 'http://www.url.biz/on-complete.html')
             ->setData($data = ['foo' => 'bar']);
 
         $response = $this->client->userReportMake($params);
@@ -1488,10 +1488,10 @@ class ClientTest extends AbstractTestCase
 
         $params = new UserReportMakeParams($report_type_uid, $type = 'VIN', $body = 'Z94CB41AAGR323020');
         $params
-            ->setIdempotenceKey($idempotence_key = $this->faker->word)
-            ->setForce($this->faker->boolean)
-            ->setOnUpdateUrl($this->faker->url)
-            ->setOnCompleteUrl($this->faker->url);
+            ->setIdempotenceKey($idempotence_key = \uniqid())
+            ->setForce((bool)\random_int(0, 1))
+            ->setOnUpdateUrl('http://www.some-url.biz/on-update.html')
+            ->setOnCompleteUrl('http://www.some-url.biz/on-complete.html');
 
         $response = $this->client->userReportMake($params);
 

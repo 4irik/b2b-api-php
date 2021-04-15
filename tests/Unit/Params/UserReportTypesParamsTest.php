@@ -19,14 +19,14 @@ class UserReportTypesParamsTest extends AbstractTestCase
     {
         $params = new UserReportTypesParams;
         $params
-            ->setCanGenerate($can_generate = $this->faker->boolean)
-            ->setQuery($query = $this->faker->word)
-            ->setPage($page = $this->faker->randomDigitNotNull)
-            ->setPerPage($per_page = $this->faker->randomDigitNotNull)
-            ->setOffset($offset = $this->faker->randomDigitNotNull)
-            ->setSortBy($sort_by = $this->faker->word)
-            ->setWithContent($include_content = $this->faker->boolean)
-            ->setCalcTotal($calc_total = $this->faker->boolean);
+            ->setCanGenerate($can_generate = (bool)\random_int(0,1))
+            ->setQuery($query = 'query')
+            ->setPage($page = \random_int(1, PHP_INT_MAX))
+            ->setPerPage($per_page = \random_int(1, PHP_INT_MAX))
+            ->setOffset($offset = \random_int(1, PHP_INT_MAX))
+            ->setSortBy($sort_by = 'column-name')
+            ->setWithContent($include_content = (bool)\random_int(0,1))
+            ->setCalcTotal($calc_total = (bool)\random_int(0,1));
 
         $this->assertSame($can_generate, $params->isCanGenerate());
         $this->assertSame($query, $params->getQuery());
